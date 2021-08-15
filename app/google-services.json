@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "63757566187",
+    "project_id": "pharmago-777d0",
+    "storage_bucket": "pharmago-777d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63757566187:android:0c4220fc1a8b45151c7eae",
+        "android_client_info": {
+          "package_name": "com.example.pharmago"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63757566187-5160ng353a0dp6eds5strmfm7r2jgp2b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRN-UAgXnQ9Ml421LVjF8ajKP9oPDQg9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63757566187-5160ng353a0dp6eds5strmfm7r2jgp2b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

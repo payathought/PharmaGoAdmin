@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_medecine"
+        android:icon="@drawable/ic_baseline_local_pharmacy_24"
+        android:title="@string/pharmacy_list"
+        />
+    <item
+        android:id="@+id/nav_order"
+        android:icon="@drawable/ic_order_list"
+        android:title="@string/order_list"
+        />
+
+</menu>
