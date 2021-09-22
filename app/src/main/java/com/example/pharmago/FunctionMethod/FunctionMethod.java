@@ -167,9 +167,9 @@ public class FunctionMethod extends Activity {
                     }
                 }).check();
     }
-    public void callPermission(Activity activity)
+    public void callPermission(Context activity)
     {
-        Dexter.withActivity(activity)
+        Dexter.withContext(activity)
                 .withPermission(Manifest.permission.CALL_PHONE)
                 .withListener(new PermissionListener() {
                     @Override
@@ -189,9 +189,9 @@ public class FunctionMethod extends Activity {
                 }).check();
 
     }
-    public void sendSMSPermission(Activity activity)
+    public void sendSMSPermission(Context activity)
     {
-        Dexter.withActivity(activity)
+        Dexter.withContext(activity)
                 .withPermission(Manifest.permission.SEND_SMS)
                 .withListener(new PermissionListener() {
                     @Override

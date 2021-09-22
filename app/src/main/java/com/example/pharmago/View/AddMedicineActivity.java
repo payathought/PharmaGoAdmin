@@ -37,7 +37,7 @@ import es.dmoral.toasty.Toasty;
 public class AddMedicineActivity extends AppCompatActivity {
     private static final String TAG = "AddMedicineActivity";
     Button btn_cancel, btn_add;
-    EditText et_medicineName,et_medicinePrice;
+    EditText et_medicineName,et_medicinePrice,et_quantity;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     ProgressDialog progressDialog;
     Intent intent;
@@ -62,6 +62,7 @@ public class AddMedicineActivity extends AppCompatActivity {
         btn_cancel = findViewById(R.id.btn_cancel);
         et_medicineName = findViewById(R.id.et_medicineName);
         et_medicinePrice = findViewById(R.id.et_medicinePrice);
+        et_quantity = findViewById(R.id.et_quantity);
 
         toolbar  = findViewById(R.id.toolBar);
         txtUserToolbar  = findViewById(R.id.txtUserToolbar);
@@ -100,6 +101,7 @@ public class AddMedicineActivity extends AppCompatActivity {
                                         MedicineModel med = document.toObject(MedicineModel.class);
                                         et_medicineName.setText(med.getMedecine_name());
                                         et_medicinePrice.setText(med.getMedecine_price());
+                                        et_quantity.setText(med.getMedicine_quantity());
 
                                     }
                                 }

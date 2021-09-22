@@ -23,7 +23,9 @@ import android.widget.TextView;
 import com.example.pharmago.Adapter.MedicineListAdapter;
 import com.example.pharmago.Adapter.OrderListAdpater;
 import com.example.pharmago.Model.MedicineModel;
+import com.example.pharmago.Model.MyOrderModel;
 import com.example.pharmago.Model.OrderModel;
+import com.example.pharmago.Model.PharmacyModel;
 import com.example.pharmago.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,7 +43,7 @@ import java.util.ArrayList;
 
 public class OrderListFragment extends Fragment {
     private View view;
-    private ArrayList<OrderModel> mOrderModel;
+    private ArrayList<MyOrderModel> mOrderModel;
     private static final String TAG = "OrderListFragment";
     FirebaseUser user;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,6 +52,9 @@ public class OrderListFragment extends Fragment {
     ImageView iv_empty;
     TextView tv_empty;
     ConstraintLayout parent_layout;
+
+    FirebaseAuth mFirebaseAuth;
+    FirebaseUser firebaseUser;
     public OrderListFragment() {
 
     }
@@ -70,7 +75,7 @@ public class OrderListFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mOrderModel = new ArrayList<>();
+
 
 
         progressDialog = new ProgressDialog(getContext());
@@ -78,75 +83,68 @@ public class OrderListFragment extends Fragment {
         progressDialog.setMessage("It will take a moment");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
-//        db.collection(getString(R.string.COLLECTION_ORDERLIST))
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//
-//                        if(task.isSuccessful()){
-//                            mOrderModel.clear();
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(TAG, document.get("medecine_name") + " => " + document.get("medecine_price"));
-//
-//                                if(!(document.get("status").toString().equals("cancel"))){
-//                                    OrderModel orderModel = new OrderModel();
-//                                    orderModel.setOrder_id(document.getId());
-//                                    orderModel.setMedicine_id(document.get("medicine_id").toString());
-//                                    orderModel.setMedecine_name(document.get("medecine_name").toString());
-//                                    orderModel.setMedecine_price(document.get("medecine_price").toString());
-//                                    orderModel.setDriver_status(document.get("driver_status").toString());
-//                                    orderModel.setUser_id(document.get("user_id").toString());
-//                                    orderModel.setDriver_id(document.get("driver_id").toString());
-//                                    orderModel.setStatus(document.get("status").toString());
-//
-//                                    mOrderModel.add(orderModel);
-//                                }
-//
-//
-//
-//                            }
-//                            OrderListAdpater orderListAdpater = new OrderListAdpater(getContext(), mOrderModel);
-//                            rv_orderList.setAdapter(orderListAdpater);
-//
-//                        }
-//                    }
-//                });
 
-        db.collection(getString(R.string.COLLECTION_ORDERLIST))
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
+
+        db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,  FirebaseFirestoreException e) {
-                        mOrderModel.clear();
-                        for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments())
-                        {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
 
-                            if (!(document.get("status").toString().equals("cancel"))) {
-                                OrderModel orderModel =  document.toObject(OrderModel.class);
-                                orderModel.setOrder_id(document.getId());
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String pharmaId = document.getId();
+                                PharmacyModel pharmacyModel = document.toObject(PharmacyModel.class);
+                                if(pharmacyModel.getUser_id().equals(firebaseUser.getUid())){
+                                    db.collection(getString(R.string.COLLECTION_MY_ORDERLIST)).
+                                            addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                                    mOrderModel = new ArrayList<>();
+                                                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()){
+                                                        MyOrderModel orderModel = document.toObject(MyOrderModel.class);
+
+                                                        Log.d(TAG, "onEvent: " + orderModel.getStatus());
+                                                        orderModel.setMyOrder_id(document.getId());
+                                                        if(!(document.get("status").toString().equals("cancel")) && pharmaId.equals(orderModel.getPharmacy_id())){
+                                                            mOrderModel.add(orderModel);
 
 
+                                                        }
 
+                                                        if(mOrderModel.size() == 0){
+                                                            iv_empty.setVisibility(View.VISIBLE);
+                                                            rv_orderList.setVisibility(View.GONE);
+                                                            tv_empty.setVisibility(View.VISIBLE);
+                                                            parent_layout.setBackgroundColor(Color.parseColor("#255265"));
 
-                                mOrderModel.add(orderModel);
+                                                        }else {
+                                                            iv_empty.setVisibility(View.GONE);
+                                                            rv_orderList.setVisibility(View.VISIBLE);
+                                                            tv_empty.setVisibility(View.GONE);
+                                                            parent_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                                        }
+
+                                                        Log.d(TAG, "onEvent: " + mOrderModel.size());
+                                                        OrderListAdpater myOrderListAdapter = new OrderListAdpater(getContext(), mOrderModel);
+                                                        rv_orderList.setAdapter(myOrderListAdapter);
+                                                    }
+
+                                                }
+                                            });
+
+                                }else{
+                                    iv_empty.setVisibility(View.VISIBLE);
+                                    rv_orderList.setVisibility(View.GONE);
+                                    tv_empty.setVisibility(View.VISIBLE);
+                                    parent_layout.setBackgroundColor(Color.parseColor("#255265"));
+                                }
+
                             }
                         }
-                        if(mOrderModel.size() == 0){
-                            iv_empty.setVisibility(View.VISIBLE);
-                            tv_empty.setVisibility(View.VISIBLE);
-                            rv_orderList.setVisibility(View.GONE);
-                            parent_layout.setBackgroundColor(Color.parseColor("#255265"));
 
-                        }else {
-                            iv_empty.setVisibility(View.GONE);
-                            tv_empty.setVisibility(View.GONE);
-                            rv_orderList.setVisibility(View.VISIBLE);
-                            parent_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        }
-
-                        OrderListAdpater orderListAdpater = new OrderListAdpater(getContext(), mOrderModel);
-                        orderListAdpater.notifyDataSetChanged();
-                        rv_orderList.setAdapter(orderListAdpater);
 
                     }
                 });

@@ -38,7 +38,7 @@ import es.dmoral.toasty.Toasty;
 public class AddMedicineDialog extends AppCompatDialogFragment {
     MedicineModel medicineModel;
     Button btn_cancel, btn_add;
-    EditText et_medicineName,et_medicinePrice;
+    EditText et_medicineName,et_medicinePrice,et_quantity;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AddMedicineDialog";
     String pharmacy_id;
@@ -52,6 +52,7 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
         btn_cancel = view.findViewById(R.id.btn_cancel);
         et_medicineName = view.findViewById(R.id.et_medicineName);
         et_medicinePrice = view.findViewById(R.id.et_medicinePrice);
+        et_quantity = view.findViewById(R.id.et_quantity);
 
         FirebaseAuth mFbAuth = FirebaseAuth.getInstance();
         builder.setView(view);
@@ -73,6 +74,7 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                                         MedicineModel med = document.toObject(MedicineModel.class);
                                         et_medicineName.setText(med.getMedecine_name());
                                         et_medicinePrice.setText(med.getMedecine_price());
+                                        et_quantity.setText(String.valueOf(med.getMedicine_quantity()));
 
                                     }
                                 }
@@ -108,6 +110,7 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                         med.setMedecine_price(et_medicinePrice.getText().toString().trim());
                         med.setMedicine_id(medicineModel.getMedicine_id());
                         med.setPharmacy_id(pharmacy_id);
+                        med.setMedicine_quantity(Integer.parseInt(et_quantity.getText().toString()));
                         db.collection(getString(R.string.COLLECTION_MEDICINELIST))
                                 .document(med.getMedicine_id())
                                 .set(med)
@@ -127,6 +130,7 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                         medicineModel.setMedecine_name(et_medicineName.getText().toString().trim());
                         medicineModel.setMedecine_price(et_medicinePrice.getText().toString().trim());
                         medicineModel.setPharmacy_id(pharmacy_id);
+                        medicineModel.setMedicine_quantity(Integer.parseInt(et_quantity.getText().toString()));
                         db.collection(getString(R.string.COLLECTION_MEDICINELIST))
                                 .add(medicineModel)
                                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
@@ -134,10 +138,19 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                                     public void onComplete(@NonNull Task<DocumentReference> task) {
                                         if (task.isSuccessful()) {
                                             Log.d("TAG", "onComplete: " + task.getResult().getId());
-                                            Toasty.info(getActivity(),
-                                                    "Added Successfully",Toast.LENGTH_LONG)
-                                                    .show();
-                                            dismiss();
+                                            medicineModel.setMedicine_id(task.getResult().getId());
+                                            db.collection(getString(R.string.COLLECTION_MEDICINELIST))
+                                                    .document(medicineModel.getMedicine_id())
+                                                    .set(medicineModel)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Toasty.info(getActivity(),
+                                                                    "Added Successfully",Toast.LENGTH_LONG)
+                                                                    .show();
+                                                            dismiss();
+                                                        }
+                                                    });
 
                                         }
                                     }

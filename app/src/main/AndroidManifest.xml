@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pharmago">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,7 +13,9 @@
         android:roundIcon="@mipmap/ic_icon_final"
         android:supportsRtl="true"
         android:theme="@style/Theme.PharmaGo">
-        <activity android:name=".View.SplashActivity"
+        <activity android:name=".View.ViewOrderActivity"></activity>
+        <activity
+            android:name=".View.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -21,10 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.MedicineListActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".View.AddPharmacyActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".View.MedicineListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".View.AddPharmacyActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".View.AddMedicineActivity"
             android:screenOrientation="portrait" />
@@ -37,9 +42,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

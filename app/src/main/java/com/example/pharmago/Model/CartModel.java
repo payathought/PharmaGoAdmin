@@ -1,21 +1,13 @@
 package com.example.pharmago.Model;
 
-public class MedicineModel {
+public class CartModel {
     private String medecine_name;
     private String medecine_price;
     private String medicine_id;
+    private String user_id;
     private String pharmacy_id;
-    private int medicine_quantity;
-
-    public MedicineModel(String medecine_name, String medecine_price,String medicine_id) {
-        this.medecine_name = medecine_name;
-        this.medecine_price = medecine_price;
-        this.medicine_id = medicine_id;
-    }
-
-    public MedicineModel() {
-
-    }
+    private String quantity;
+    private String cart_id;
 
     public String getMedecine_name() {
         return medecine_name;
@@ -41,6 +33,14 @@ public class MedicineModel {
         this.medicine_id = medicine_id;
     }
 
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
     public String getPharmacy_id() {
         return pharmacy_id;
     }
@@ -49,11 +49,19 @@ public class MedicineModel {
         this.pharmacy_id = pharmacy_id;
     }
 
-    public int getMedicine_quantity() {
-        return medicine_quantity;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setMedicine_quantity(int medicine_quantity) {
-        this.medicine_quantity = medicine_quantity;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getCart_id() {
+        return cart_id;
+    }
+
+    public void setCart_id(String cart_id) {
+        this.cart_id = cart_id;
     }
 }

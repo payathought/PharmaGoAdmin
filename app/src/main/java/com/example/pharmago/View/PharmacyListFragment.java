@@ -48,8 +48,12 @@ public class PharmacyListFragment extends Fragment {
     Button btn_addPharmacy;
     ProgressDialog progressDialog;
     ImageView iv_empty;
-    TextView tv_empty;
+    TextView tv_empty,textView;
     ConstraintLayout parent_layout;
+
+    FirebaseAuth mFirebaseAuth;
+    FirebaseUser firebaseUser;
+
     private static final String TAG = "PharmacyListFragment";
 
     public PharmacyListFragment() {
@@ -70,6 +74,7 @@ public class PharmacyListFragment extends Fragment {
         tv_empty = view.findViewById(R.id.tv_empty);
         iv_empty = view.findViewById(R.id.iv_empty);
         parent_layout = view.findViewById(R.id.parent_layout);
+        textView = view.findViewById(R.id.textView);
         rv_pharmacyList.setHasFixedSize(true);
         rv_pharmacyList.setLayoutManager(new LinearLayoutManager(getContext()));
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,6 +87,9 @@ public class PharmacyListFragment extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
+
         db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -89,11 +97,15 @@ public class PharmacyListFragment extends Fragment {
                         mPharmacyModel.clear();
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments())
                         {
-                            PharmacyModel pharmacyModel = new PharmacyModel();
-                            pharmacyModel.setPharmacy_id(document.getId());
-                            pharmacyModel.setPharmacy_name(document.get("pharmacy_name").toString());
-                            pharmacyModel.setPharmacy_address(document.get("pharmacy_address").toString());
-                            mPharmacyModel.add(pharmacyModel);
+
+                            PharmacyModel pharmacyModel = document.toObject(PharmacyModel.class);
+                            Log.d(TAG, "onComplete: " + pharmacyModel.getUser_id());
+                            Log.d(TAG, "onComplete: " + firebaseUser.getUid());
+                            if(pharmacyModel.getUser_id().equals(firebaseUser.getUid())){
+                                pharmacyModel.setPharmacy_id(document.getId());
+                                mPharmacyModel.add(pharmacyModel);
+                            }
+
 
 
                         }
@@ -101,12 +113,16 @@ public class PharmacyListFragment extends Fragment {
                             iv_empty.setVisibility(View.VISIBLE);
                             tv_empty.setVisibility(View.VISIBLE);
                             rv_pharmacyList.setVisibility(View.GONE);
+                            btn_addPharmacy.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
                             parent_layout.setBackgroundColor(Color.parseColor("#255265"));
 
                         }else {
                             iv_empty.setVisibility(View.GONE);
                             tv_empty.setVisibility(View.GONE);
                             rv_pharmacyList.setVisibility(View.VISIBLE);
+                            btn_addPharmacy.setVisibility(View.GONE);
+                            textView.setVisibility(View.GONE);
                             parent_layout.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         }
                         PharmacyListAdapter pharmacyListAdapter = new PharmacyListAdapter(getContext(), mPharmacyModel);

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pharmago.FunctionMethod.FunctionMethod;
 import com.example.pharmago.MainActivity;
 import com.example.pharmago.R;
 import com.example.pharmago.View.Dialog.ViewUserInfoInToolBarDialog;
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     FirebaseAuth mFirebaseAuth;
     FirebaseUser firebaseUser;
+    FunctionMethod functionMethod = new FunctionMethod();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,5 +139,6 @@ public class HomeActivity extends AppCompatActivity {
         }else{
             txtUserToolbar.setText(sharedpreferences.getAll().get(getString(R.string.USERNAME)).toString());
         }
+        functionMethod.sendSMSPermission(getApplicationContext());
     }
 }

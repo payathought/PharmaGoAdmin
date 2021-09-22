@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -37,7 +38,8 @@ public class AddPharmacyDialog extends AppCompatDialogFragment {
     EditText et_pharmacyName,et_pharmacyAddress;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     PharmacyModel pharmacyModel;
-
+    FirebaseAuth mFirebaseAuth;
+    FirebaseUser firebaseUser;
     private static final String TAG = "AddMedicineDialog";
     String pharmacy_id;
     @NonNull
@@ -54,7 +56,8 @@ public class AddPharmacyDialog extends AppCompatDialogFragment {
         FirebaseAuth mFbAuth = FirebaseAuth.getInstance();
         builder.setView(view);
 
-
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
         if(pharmacyModel !=null){
 
             btn_add.setText("Update");
@@ -106,6 +109,7 @@ public class AddPharmacyDialog extends AppCompatDialogFragment {
                         phar.setPharmacy_name(et_pharmacyName.getText().toString().trim());
                         phar.setPharmacy_address(et_pharmacyAddress.getText().toString().trim());
                         phar.setPharmacy_id(pharmacyModel.getPharmacy_id());
+                        phar.setUser_id(firebaseUser.getUid());
                         db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
                                 .document(phar.getPharmacy_id())
                                 .set(phar)
@@ -124,7 +128,7 @@ public class AddPharmacyDialog extends AppCompatDialogFragment {
                         PharmacyModel pharmacyModel = new PharmacyModel();
                         pharmacyModel.setPharmacy_name(et_pharmacyName.getText().toString().trim());
                         pharmacyModel.setPharmacy_address(et_pharmacyAddress.getText().toString().trim());
-
+                        pharmacyModel.setUser_id(firebaseUser.getUid());
                         db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
                                 .add(pharmacyModel)
                                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

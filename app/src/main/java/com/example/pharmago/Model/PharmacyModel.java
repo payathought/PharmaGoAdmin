@@ -5,6 +5,7 @@ public class PharmacyModel {
     private String pharmacy_name;
     private String pharmacy_address;
     private String pharmacy_id;
+    private  String user_id;
 
     public String getPharmacy_name() {
         return pharmacy_name;
@@ -31,5 +32,13 @@ public class PharmacyModel {
     }
 
     public PharmacyModel() {
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 }

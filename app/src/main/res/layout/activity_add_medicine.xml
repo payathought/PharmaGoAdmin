@@ -63,6 +63,7 @@
         android:layout_marginEnd="32dp"
         android:background="@drawable/shape_edit_text"
         android:ems="10"
+        android:fontFamily="@font/gothambook"
         android:hint="Medicine Name"
         android:inputType="textPersonName"
         android:textSize="24sp"
@@ -78,6 +79,7 @@
         android:layout_marginTop="24dp"
         android:background="@drawable/shape_edit_text"
         android:ems="10"
+        android:fontFamily="@font/gothambook"
         android:hint="Price"
         android:inputType="textPersonName"
         android:textSize="24sp"
@@ -89,7 +91,6 @@
         android:id="@+id/btn_cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/shape_button_delete"
         android:fontFamily="@font/gothambook"
@@ -98,8 +99,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_add"
         app:layout_constraintStart_toStartOf="@+id/et_medicinePrice"
-        app:layout_constraintTop_toBottomOf="@+id/et_medicinePrice"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/et_quantity" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add"
@@ -115,4 +115,19 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btn_cancel"
         app:layout_constraintTop_toTopOf="@+id/btn_cancel" />
+
+    <EditText
+        android:id="@+id/et_quantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/shape_edit_text"
+        android:ems="10"
+        android:fontFamily="@font/gothambook"
+        android:hint="Quantity"
+        android:inputType="textPersonName"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_medicinePrice"
+        app:layout_constraintStart_toStartOf="@+id/et_medicinePrice"
+        app:layout_constraintTop_toBottomOf="@+id/et_medicinePrice" />
 </androidx.constraintlayout.widget.ConstraintLayout>

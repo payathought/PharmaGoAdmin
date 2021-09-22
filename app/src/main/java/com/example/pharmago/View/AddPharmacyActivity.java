@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -46,7 +47,8 @@ public class AddPharmacyActivity extends AppCompatActivity {
     TextView txtUserToolbar;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
-
+    FirebaseAuth mFirebaseAuth;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,8 @@ public class AddPharmacyActivity extends AppCompatActivity {
         txtUserToolbar  = findViewById(R.id.txtUserToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
-
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
         sharedpreferences = getSharedPreferences(getString(R.string.USERPREF), Context.MODE_PRIVATE);
 
         if (sharedpreferences.getAll().isEmpty())
@@ -133,6 +136,7 @@ public class AddPharmacyActivity extends AppCompatActivity {
                         pharmacyModel.setPharmacy_name(et_pharmacyName.getText().toString().trim());
                         pharmacyModel.setPharmacy_address(et_pharmacyAddress.getText().toString().trim());
                         pharmacyModel.setPharmacy_id(id);
+                        pharmacyModel.setUser_id(firebaseUser.getUid());
                         db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
                                 .document(id)
                                 .set(pharmacyModel)
@@ -148,7 +152,7 @@ public class AddPharmacyActivity extends AppCompatActivity {
                         PharmacyModel pharmacyModel = new PharmacyModel();
                         pharmacyModel.setPharmacy_name(et_pharmacyName.getText().toString().trim());
                         pharmacyModel.setPharmacy_address(et_pharmacyAddress.getText().toString().trim());
-
+                        pharmacyModel.setUser_id(firebaseUser.getUid());
                         db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
                                 .add(pharmacyModel)
                                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
