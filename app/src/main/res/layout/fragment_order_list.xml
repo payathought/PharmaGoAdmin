@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/gothambook"
-                android:text="Note: Click the item to view the Order"
+                android:text="Note: To see the driver's information (if status: 'Accepted By The Driver') or view order information, click the the item."
                 android:textColor="#47C6E9"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"

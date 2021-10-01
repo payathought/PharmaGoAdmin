@@ -106,7 +106,7 @@ public class OrderListFragment extends Fragment {
                                                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()){
                                                         MyOrderModel orderModel = document.toObject(MyOrderModel.class);
 
-                                                        Log.d(TAG, "onEvent: " + orderModel.getStatus());
+                                                        Log.d(TAG, "onEvent: driver_ID " + orderModel.getDriver_id());
                                                         orderModel.setMyOrder_id(document.getId());
                                                         if(!(document.get("status").toString().equals("cancel")) && pharmaId.equals(orderModel.getPharmacy_id())){
                                                             mOrderModel.add(orderModel);

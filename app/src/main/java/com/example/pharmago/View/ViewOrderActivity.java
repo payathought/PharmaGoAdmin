@@ -19,13 +19,17 @@ import android.widget.TextView;
 import com.example.pharmago.Adapter.ViewMyOrderListAdapter;
 import com.example.pharmago.Model.MyOrderItemsModel;
 import com.example.pharmago.Model.MyOrderModel;
+import com.example.pharmago.Model.UserSignUpModel;
 import com.example.pharmago.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -41,7 +45,7 @@ public class ViewOrderActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     FirebaseAuth mFirebaseAuth;
     FirebaseUser firebaseUser;
-    TextView tv_total,tv_payment_method;
+    TextView tv_total,tv_payment_method,tv_name,tv_number;
     CardView cv_total;
     ImageView iv_empty;
     ConstraintLayout parent_layout;
@@ -56,6 +60,8 @@ public class ViewOrderActivity extends AppCompatActivity {
         id = intent.getStringExtra("order_id");
         rv_orderList = findViewById(R.id.rv_orderList);
         tv_total = findViewById(R.id.tv_total);
+        tv_number = findViewById(R.id.tv_number);
+        tv_name = findViewById(R.id.tv_name);
         cv_total = findViewById(R.id.cv_total);
         tv_payment_method = findViewById(R.id.tv_payment_method);
 
@@ -82,7 +88,26 @@ public class ViewOrderActivity extends AppCompatActivity {
                         for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()){
 
                             if(document.getId().equals(id)){
+
                                 MyOrderModel myOrderModel = document.toObject(MyOrderModel.class);
+
+                                CollectionReference userinfo = db.collection(getString(R.string.COLLECTION_USER_INFORMATION));
+                                Query userInfoQuery = userinfo.whereEqualTo("user_id", myOrderModel.getUser_id());
+                                userInfoQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot querySnapshot) {
+                                        if (!querySnapshot.isEmpty()) {
+
+                                            UserSignUpModel userModel = querySnapshot.getDocuments().get(0).toObject(UserSignUpModel.class);
+                                            tv_name.setText(userModel.getFirstname() + " " + userModel.getLastname());
+                                            tv_number.setText(userModel.getPhonenumber());
+
+
+
+
+                                        }
+                                    }
+                                });
                                 Log.d(TAG, "payment: " + myOrderModel.getPayment_method());
                                 if(myOrderModel.getPayment_method().equals("cod")){
                                     tv_payment_method.setText(myOrderModel.getPayment_method().toUpperCase());
