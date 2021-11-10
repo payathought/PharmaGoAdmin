@@ -5,16 +5,20 @@
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10sp"
-    android:paddingRight="10sp">
+
+    android:background="@color/main"
+    android:paddingStart="5sp"
+    android:paddingLeft="5sp"
+    android:paddingTop="5sp"
+    android:paddingEnd="5sp"
+    android:paddingRight="5sp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:elevation="15dp"
-        app:cardBackgroundColor="#47C6E9"
-        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +35,7 @@
                 android:id="@+id/tv_pharmaName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/gothambold"
                 android:text="South Star Drug"
@@ -49,6 +53,7 @@
                 android:fontFamily="@font/gothammedium"
                 android:text="Accept"
                 android:textSize="8sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_olCancel"
                 app:layout_constraintTop_toTopOf="@+id/tv_pharmaName" />
 
@@ -56,17 +61,14 @@
                 android:id="@+id/tv_driverStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/gothambold"
                 android:text="Pending"
                 android:textColor="#013263"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_sms"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_payment_method"
-                app:layout_constraintTop_toTopOf="@+id/tv_pharmaName" />
+                app:layout_constraintStart_toStartOf="@+id/tv_payment_method"
+                app:layout_constraintTop_toBottomOf="@+id/tv_payment_method" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_olCancel"
@@ -85,11 +87,11 @@
                 android:id="@+id/tv_medName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/gothammedium"
                 android:text="Tiki-tiki"
                 android:textColor="#013263"
-                android:textSize="8sp"
-                app:layout_constraintEnd_toStartOf="@+id/tv_payment_method"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/tv_pharmaName"
                 app:layout_constraintTop_toBottomOf="@+id/tv_pharmaName" />
 
@@ -97,23 +99,24 @@
                 android:id="@+id/tv_payment_method"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/gothammedium"
                 android:text="COD"
                 android:textColor="#013263"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_medName"
-                app:layout_constraintStart_toEndOf="@+id/tv_pharmaName"
-                app:layout_constraintTop_toBottomOf="@+id/tv_pharmaName" />
+                app:layout_constraintStart_toStartOf="@+id/tv_medName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_medName" />
 
             <ImageButton
                 android:id="@+id/btn_sms"
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="4dp"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/shape_button_create_account"
                 android:src="@drawable/ic_sms"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_medName"
-                app:layout_constraintTop_toBottomOf="@+id/tv_medName" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_driverStatus" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

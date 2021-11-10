@@ -44,6 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -85,27 +86,28 @@ public class OrderListAdpater extends RecyclerView.Adapter<OrderListAdpater.View
                                 if(document.getId().equals(orderModel.getPharmacy_id())){
 
                                     PharmacyModel pharmacyModel = document.toObject(PharmacyModel.class);
-                                    holder.tv_medName.setText("Order id: " + orderModel.getMyOrder_id());
+                                    SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
+                                    holder.tv_medName.setText("Date Ordered: " + formatter.format(orderModel.getDateOrdered()));
 
                                     holder.tv_pharmaName.setText(pharmacyModel.getPharmacy_name());
                                     Log.d(TAG, "onComplete: " + orderModel.getPayment_method());
                                     if(orderModel.getPayment_method().equals("cod")){
-                                        holder.tv_payment_method.setText("COD");
+                                        holder.tv_payment_method.setText("Payment Method: COD");
 
                                     }else {
-                                        holder.tv_payment_method.setText("Paid");
+                                        holder.tv_payment_method.setText("Payment Method: Credit/Debit (Paid)");
 
                                     }
                                     if(orderModel.getDriver_status().equals("pending")){
 
-                                        holder.tv_driverStatus.setText(orderModel.getStatus().toUpperCase());
+                                        holder.tv_driverStatus.setText("Order Status: " + orderModel.getStatus().toUpperCase());
 
                                     }else {
                                         if(orderModel.getStatus().equals("done")){
-                                            holder.tv_driverStatus.setText(orderModel.getStatus().toUpperCase());
+                                            holder.tv_driverStatus.setText("Order Status: " + orderModel.getStatus().toUpperCase());
                                         }else {
-                                            holder.tv_driverStatus.setText("Accepted By The driver");
-                                            holder.tv_driverStatus.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+                                            holder.tv_driverStatus.setText("Order Status: Accepted By The driver");
+                                            holder.tv_driverStatus.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                                         }
                                     }
 
@@ -122,11 +124,11 @@ public class OrderListAdpater extends RecyclerView.Adapter<OrderListAdpater.View
 
 
         if((orderModel.getStatus().equals("pending"))){
-            holder.tv_driverStatus.setVisibility(View.GONE);
+//            holder.tv_driverStatus.setVisibility(View.GONE);
             holder.btn_olAccept.setVisibility(View.VISIBLE);
             holder.btn_olCancel.setVisibility(View.VISIBLE);
         }else {
-            holder.tv_driverStatus.setVisibility(View.VISIBLE);
+//            holder.tv_driverStatus.setVisibility(View.VISIBLE);
             holder.btn_olAccept.setVisibility(View.GONE);
             holder.btn_olCancel.setVisibility(View.GONE);
         }

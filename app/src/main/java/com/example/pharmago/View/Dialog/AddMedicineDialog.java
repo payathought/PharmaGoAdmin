@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,10 +41,17 @@ import es.dmoral.toasty.Toasty;
 public class AddMedicineDialog extends AppCompatDialogFragment {
     MedicineModel medicineModel;
     Button btn_cancel, btn_add;
-    EditText et_medicineName,et_medicinePrice,et_quantity;
+    EditText et_medicineName,et_medicinePrice,et_quantity,et_description;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "AddMedicineDialog";
     String pharmacy_id;
+
+    RadioButton rb_medicine, rb_vitamins,rb_supplements;
+    RadioGroup radio_group;
+    TextView tv_rbRequired;
+
+    String category;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -53,9 +63,17 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
         et_medicineName = view.findViewById(R.id.et_medicineName);
         et_medicinePrice = view.findViewById(R.id.et_medicinePrice);
         et_quantity = view.findViewById(R.id.et_quantity);
+        et_description = view.findViewById(R.id.et_description);
+        rb_medicine = view.findViewById(R.id.rb_medicine);
+        rb_vitamins = view.findViewById(R.id.rb_vitamins);
+        rb_supplements = view.findViewById(R.id.rb_supplements);
+        radio_group = view.findViewById(R.id.radio_group);
+        tv_rbRequired = view.findViewById(R.id.tv_rbRequired);
 
         FirebaseAuth mFbAuth = FirebaseAuth.getInstance();
         builder.setView(view);
+
+
 
         if(medicineModel != null){
 
@@ -75,6 +93,17 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                                         et_medicineName.setText(med.getMedecine_name());
                                         et_medicinePrice.setText(med.getMedecine_price());
                                         et_quantity.setText(String.valueOf(med.getMedicine_quantity()));
+                                        et_description.setText(String.valueOf(med.getDescription()));
+
+                                        category = med.getCategory();
+
+                                        if (category.equals("Medicine")){
+                                            rb_medicine.setChecked(true);
+                                        }else if (med.getCategory().equals("Vitamins")){
+                                            rb_vitamins.setChecked(true);
+                                        }else{
+                                            rb_supplements.setChecked(true);
+                                        }
 
                                     }
                                 }
@@ -83,10 +112,36 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
 
                         }
                     });
+
+
         }else
         {
+
             btn_add.setText("Add");
         }
+
+        radio_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch(i){
+                    case R.id.rb_medicine:
+                        category = rb_medicine.getText().toString();
+                        tv_rbRequired.setVisibility(View.GONE);
+                        break;
+                    case R.id.rb_vitamins:
+
+                        category = rb_vitamins.getText().toString();
+                        tv_rbRequired.setVisibility(View.GONE);
+                        break;
+                    case R.id.rb_supplements:
+
+                        category = rb_supplements.getText().toString();
+                        tv_rbRequired.setVisibility(View.GONE);
+                        break;
+
+                }
+            }
+        });
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,17 +158,26 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
                 }else if (et_medicinePrice.getText().toString().trim().isEmpty()){
                     et_medicinePrice.setError("This Field is required");
 
-                }else{
+                }else if (et_quantity.getText().toString().trim().isEmpty()){
+                    et_quantity.setError("This Field is required");
+
+                }else if (et_description.getText().toString().trim().isEmpty()){
+                    et_description.setError("This Field is required");
+
+                }
+                else{
                     if(medicineModel != null){
-                        MedicineModel med = new MedicineModel();
-                        med.setMedecine_name(et_medicineName.getText().toString().trim());
-                        med.setMedecine_price(et_medicinePrice.getText().toString().trim());
-                        med.setMedicine_id(medicineModel.getMedicine_id());
-                        med.setPharmacy_id(pharmacy_id);
-                        med.setMedicine_quantity(Integer.parseInt(et_quantity.getText().toString()));
+
+                        medicineModel.setMedecine_name(et_medicineName.getText().toString().trim());
+                        medicineModel.setMedecine_price(et_medicinePrice.getText().toString().trim());
+                        medicineModel.setMedicine_id(medicineModel.getMedicine_id());
+                        medicineModel.setPharmacy_id(pharmacy_id);
+                        medicineModel.setMedicine_quantity(Integer.parseInt(et_quantity.getText().toString()));
+                        medicineModel.setDescription((et_description.getText().toString()));
+                        medicineModel.setCategory(category);
                         db.collection(getString(R.string.COLLECTION_MEDICINELIST))
-                                .document(med.getMedicine_id())
-                                .set(med)
+                                .document(medicineModel.getMedicine_id())
+                                .set(medicineModel)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
@@ -126,11 +190,13 @@ public class AddMedicineDialog extends AppCompatDialogFragment {
 
 
                     }else{
-                        MedicineModel medicineModel = new MedicineModel();
+                        medicineModel = new MedicineModel();
                         medicineModel.setMedecine_name(et_medicineName.getText().toString().trim());
                         medicineModel.setMedecine_price(et_medicinePrice.getText().toString().trim());
                         medicineModel.setPharmacy_id(pharmacy_id);
+                        medicineModel.setDescription((et_description.getText().toString()));
                         medicineModel.setMedicine_quantity(Integer.parseInt(et_quantity.getText().toString()));
+                        medicineModel.setCategory(category);
                         db.collection(getString(R.string.COLLECTION_MEDICINELIST))
                                 .add(medicineModel)
                                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

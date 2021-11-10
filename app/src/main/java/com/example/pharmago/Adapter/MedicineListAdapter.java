@@ -56,6 +56,9 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
         MedicineModel medicineModel = mMedecineModel.get(position);
         holder.tv_medecineName.setText(medicineModel.getMedecine_name());
         holder.tv_price.setText("₱"+medicineModel.getMedecine_price());
+        holder.tv_description.setText(medicineModel.getDescription());
+        holder.tv_category.setText(medicineModel.getCategory());
+
 
         holder.btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,47 +73,47 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
 
             }
         });
-        holder.btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-                builder1.setMessage("Are you sure you want to delete this data?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                MedicineModel medicineModel = mMedecineModel.get(position);
-                                db.collection(mContext.getString(R.string.COLLECTION_MEDICINELIST))
-                                        .document(medicineModel.getMedicine_id())
-                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toasty.info(mContext,
-                                                "Data has been deleted.", Toast.LENGTH_LONG)
-                                                .show();
-                                        notifyDataSetChanged();
-                                    }
-                                });
-                                dialog.cancel();
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-
-
-            }
-        });
+//        holder.btn_delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+//                builder1.setMessage("Are you sure you want to delete this data?");
+//                builder1.setCancelable(true);
+//
+//                builder1.setPositiveButton(
+//                        "Yes",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                MedicineModel medicineModel = mMedecineModel.get(position);
+//                                db.collection(mContext.getString(R.string.COLLECTION_MEDICINELIST))
+//                                        .document(medicineModel.getMedicine_id())
+//                                        .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void unused) {
+//                                        Toasty.info(mContext,
+//                                                "Data has been deleted.", Toast.LENGTH_LONG)
+//                                                .show();
+//                                        notifyDataSetChanged();
+//                                    }
+//                                });
+//                                dialog.cancel();
+//                            }
+//                        });
+//
+//                builder1.setNegativeButton(
+//                        "No",
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//
+//                AlertDialog alert11 = builder1.create();
+//                alert11.show();
+//
+//
+//            }
+//        });
 
         holder.parent_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,16 +134,18 @@ public class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ConstraintLayout parent_layout;
-        TextView tv_medecineName,tv_price;
-        Button btn_edit,btn_delete;
+        TextView tv_medecineName,tv_price,tv_description,tv_category;
+        Button btn_edit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_price = itemView.findViewById(R.id.tv_price);
             tv_medecineName = itemView.findViewById(R.id.tv_medecineName);
+            tv_description = itemView.findViewById(R.id.tv_description);
+            tv_category = itemView.findViewById(R.id.tv_category);
             parent_layout = itemView.findViewById(R.id.parent_layout);
             btn_edit = itemView.findViewById(R.id.btn_edit);
-            btn_delete = itemView.findViewById(R.id.btn_delete);
+
 
 
 

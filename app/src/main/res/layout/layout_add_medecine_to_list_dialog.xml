@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/shape_dialog_layout">
 
     <androidx.cardview.widget.CardView
@@ -67,7 +67,7 @@
         android:id="@+id/et_medicinePrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/shape_edit_text"
         android:ems="10"
         android:hint="Price"
@@ -81,9 +81,7 @@
         android:id="@+id/btn_cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
         android:background="@drawable/shape_button_delete"
         android:fontFamily="@font/gothambook"
         android:text="Cancel"
@@ -91,7 +89,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_add"
         app:layout_constraintStart_toStartOf="@+id/et_medicinePrice"
-        app:layout_constraintTop_toBottomOf="@+id/et_quantity" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_rbRequired" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add"
@@ -112,7 +110,7 @@
         android:id="@+id/et_quantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/shape_edit_text"
         android:ems="10"
         android:fontFamily="@font/gothambook"
@@ -122,4 +120,79 @@
         app:layout_constraintEnd_toEndOf="@+id/et_medicinePrice"
         app:layout_constraintStart_toStartOf="@+id/et_medicinePrice"
         app:layout_constraintTop_toBottomOf="@+id/et_medicinePrice" />
+
+    <EditText
+        android:id="@+id/et_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_edit_text"
+        android:ems="10"
+        android:fontFamily="@font/gothambook"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_quantity"
+        app:layout_constraintStart_toStartOf="@+id/et_quantity"
+        app:layout_constraintTop_toBottomOf="@+id/et_quantity" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Category: "
+        android:fontFamily="@font/gothambook"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/et_description"
+        app:layout_constraintStart_toStartOf="@+id/et_description"
+        app:layout_constraintTop_toBottomOf="@+id/et_description" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/textView14"
+        app:layout_constraintStart_toStartOf="@+id/et_description"
+        app:layout_constraintTop_toBottomOf="@+id/textView14">
+
+        <RadioButton
+            android:id="@+id/rb_medicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:fontFamily="@font/gothambook"
+            android:text="Medicine"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/rb_vitamins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gothambook"
+            android:text="Vitamins"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/rb_supplements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gothambook"
+            android:text="Supplements"
+            android:textColor="@color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_rbRequired"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="This field is required"
+        android:textColor="#F44336"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/radio_group"
+        app:layout_constraintStart_toStartOf="@+id/radio_group"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,11 +19,18 @@ import android.widget.Toast;
 
 import com.example.pharmago.FunctionMethod.FunctionMethod;
 import com.example.pharmago.MainActivity;
+import com.example.pharmago.Model.PharmacyModel;
 import com.example.pharmago.R;
+import com.example.pharmago.View.Dialog.AddPharmacyDialog;
 import com.example.pharmago.View.Dialog.ViewUserInfoInToolBarDialog;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import es.dmoral.toasty.Toasty;
 
@@ -36,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     FirebaseUser firebaseUser;
     FunctionMethod functionMethod = new FunctionMethod();
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         });
         bottomNav.setOnNavigationItemSelectedListener(navlistener);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_fragmentContainer, new PharmacyListFragment()).commit();
+                .replace(R.id.fl_fragmentContainer, new MedicineListFragment()).commit();
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navlistener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -77,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_medecine:
-                            selectedFragment = new PharmacyListFragment();
+                            selectedFragment = new MedicineListFragment();
                             break;
                         case R.id.nav_order:
                             selectedFragment = new OrderListFragment();
@@ -111,6 +120,32 @@ public class HomeActivity extends AppCompatActivity {
             firebaseAuth.signOut();
             Toasty.info(getApplicationContext(), "Logging Out", Toast.LENGTH_SHORT).show();
         }
+        else if(item.getItemId() == R.id.update){
+            db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull  Task<QuerySnapshot> task) {
+
+                            if (task.isSuccessful()){
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    PharmacyModel pharmacyModel = document.toObject(PharmacyModel.class);
+                                    if(pharmacyModel.getUser_id().equals(firebaseUser.getUid())){
+                                        AddPharmacyDialog dialog = new AddPharmacyDialog(pharmacyModel);
+                                        dialog.show(getSupportFragmentManager(), "PharmaGo");
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+
+        }else if(item.getItemId() == R.id.tnp){
+            startActivity(new Intent(this, TermsAndPrivacyLandingPage.class));
+        }
+
+
         return false;
     }
 

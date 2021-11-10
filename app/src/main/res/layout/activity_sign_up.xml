@@ -35,23 +35,24 @@
             android:background="@drawable/shape_edit_text"
             android:ems="10"
             android:fontFamily="@font/gothambook"
-            android:hint="First Name"
+            android:hint="Pharmacy Name"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_Logo" />
 
         <EditText
-            android:id="@+id/et_LastName"
+            android:id="@+id/et_pharmacyAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/shape_edit_text"
             android:ems="10"
             android:fontFamily="@font/gothambook"
-            android:hint="Last Name"
+            android:hint="Pharmacy Address"
             android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="@+id/et_FirstName"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/et_FirstName"
             app:layout_constraintTop_toBottomOf="@+id/et_FirstName" />
 
@@ -65,9 +66,9 @@
             android:fontFamily="@font/gothambook"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/et_LastName"
-            app:layout_constraintStart_toStartOf="@+id/et_LastName"
-            app:layout_constraintTop_toBottomOf="@+id/et_LastName" />
+            app:layout_constraintEnd_toEndOf="@+id/et_pharmacyAddress"
+            app:layout_constraintStart_toStartOf="@+id/et_pharmacyAddress"
+            app:layout_constraintTop_toBottomOf="@+id/et_pharmacyAddress" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_Register"

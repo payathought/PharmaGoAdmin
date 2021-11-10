@@ -102,7 +102,6 @@ public class PharmacyListFragment extends Fragment {
                             Log.d(TAG, "onComplete: " + pharmacyModel.getUser_id());
                             Log.d(TAG, "onComplete: " + firebaseUser.getUid());
                             if(pharmacyModel.getUser_id().equals(firebaseUser.getUid())){
-                                pharmacyModel.setPharmacy_id(document.getId());
                                 mPharmacyModel.add(pharmacyModel);
                             }
 

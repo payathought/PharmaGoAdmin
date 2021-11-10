@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ViewOrderActivity extends AppCompatActivity {
@@ -45,12 +46,13 @@ public class ViewOrderActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     FirebaseAuth mFirebaseAuth;
     FirebaseUser firebaseUser;
-    TextView tv_total,tv_payment_method,tv_name,tv_number;
+    TextView tv_total,tv_payment_method,tv_name,tv_number,tv_subtotal,tv_vat;
     CardView cv_total;
     ImageView iv_empty;
     ConstraintLayout parent_layout;
     int total= 0;
     int codTotal= 0;
+    double vat = 0.0;
     private static final String TAG = "ViewOrderActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class ViewOrderActivity extends AppCompatActivity {
 
         iv_empty = findViewById(R.id.iv_empty);
         parent_layout = findViewById(R.id.parent_layout);
+        tv_subtotal = findViewById(R.id.tv_subtotal);
+        tv_vat = findViewById(R.id.tv_vat);
+
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         progressDialog = new ProgressDialog(ViewOrderActivity.this);
@@ -148,11 +153,15 @@ public class ViewOrderActivity extends AppCompatActivity {
                             if(id.equals(orderItems.getMyOrder_id())){
                                 mMyOrderItemsModel.add(orderItems);
                                 codTotal += Integer.parseInt(orderItems.getMedecine_price());
-                                tv_total.setText("₱" + (codTotal+100));
-
+//                                tv_total.setText("₱" + (codTotal+100));
+                                tv_subtotal.setText("₱" + codTotal);
                                 Log.d(TAG, "onEvent: " + codTotal);
 
                             }
+                            DecimalFormat dec = new DecimalFormat("#0.00");
+                            vat = (codTotal*.12);
+                            tv_vat.setText("₱" + dec.format(vat));
+                            tv_total.setText("₱" + dec.format(codTotal+100+vat));
 
                             if(mMyOrderItemsModel.size() == 0){
                                 cv_total.setVisibility(View.GONE);

@@ -16,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pharmago.FunctionMethod.FunctionMethod;
+import com.example.pharmago.Model.PharmacyModel;
 import com.example.pharmago.Model.SignUpModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +32,7 @@ import es.dmoral.toasty.Toasty;
 
 public class SignUp extends AppCompatActivity {
     Button btn_Register;
-    EditText et_FirstName, et_LastName,et_EmailAddress,et_userName,et_Password,et_confirmPassword,et_phoneNumber;
+    EditText et_FirstName, et_pharmacyAddress,et_EmailAddress,et_userName,et_Password,et_confirmPassword,et_phoneNumber;
     TextView tv_matcher;
     ProgressDialog progressDialog;
     FirebaseAuth mFirebaseAuth;
@@ -54,7 +56,7 @@ public class SignUp extends AppCompatActivity {
 
         btn_Register = findViewById(R.id.btn_Register);
         et_FirstName  = findViewById(R.id.et_FirstName);
-        et_LastName  = findViewById(R.id.et_LastName);
+        et_pharmacyAddress  = findViewById(R.id.et_pharmacyAddress);
         et_EmailAddress  = findViewById(R.id.et_EmailAddress);
         et_userName = findViewById(R.id.et_emailAddress);
         et_Password = findViewById(R.id.et_Password);
@@ -152,9 +154,9 @@ public class SignUp extends AppCompatActivity {
                 if (et_FirstName.getText().toString().trim().isEmpty())
                 {
                     setErrors(et_FirstName);
-                }else if (et_LastName.getText().toString().trim().isEmpty())
+                }else if (et_pharmacyAddress.getText().toString().trim().isEmpty())
                 {
-                    setErrors(et_LastName);
+                    setErrors(et_pharmacyAddress);
                 }else if (et_userName.getText().toString().trim().isEmpty())
                 {
                     setErrors(et_userName);
@@ -235,7 +237,7 @@ public class SignUp extends AppCompatActivity {
         if(signupModel.getUser_id() != null) {
             Log.e("If", "savedDatatoFS: Success");
             signupModel.setFirstname(et_FirstName.getText().toString());
-            signupModel.setLastname(et_LastName.getText().toString());
+            signupModel.setAddress(et_pharmacyAddress.getText().toString());
             signupModel.setUsername(et_userName.getText().toString());
             signupModel.setPhonenumber(et_phoneNumber.getText().toString());
             signupModel.setPassword(et_Password.getText().toString());
@@ -261,6 +263,23 @@ public class SignUp extends AppCompatActivity {
                                                     Toasty.success(SignUp.this,
                                                             "Check your email for Email Verification.", Toast.LENGTH_LONG)
                                                             .show();
+
+                                                    PharmacyModel phar = new PharmacyModel();
+                                                    phar.setPharmacy_name(et_FirstName.getText().toString().trim());
+                                                    phar.setPharmacy_address(et_pharmacyAddress.getText().toString().trim());
+                                                    phar.setPharmacy_id(user.getUid());
+                                                    phar.setUser_id(user.getUid());
+                                                    db.collection(getString(R.string.COLLECTION_PHARMACYLIST))
+                                                            .document(phar.getPharmacy_id())
+                                                            .set(phar)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+
+                                                                }
+                                                            });
+
+
                                                     startActivity(new Intent(SignUp.this, MainActivity.class));
                                                     finish();
                                                 }else{
